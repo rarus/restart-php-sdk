@@ -1,0 +1,50 @@
+{
+  "name": "rarus/restart-php-sdk",
+  "description": "1C-Rarus Restart PHP SDK",
+  "keywords": [
+    "Rarus",
+    "PHP",
+    "REST",
+    "API"
+  ],
+  "type": "library",
+  "homepage": "https://rarus.ru",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Anastasiya Daragan",
+      "email": "eran@rarus.ru",
+      "homepage": "https://rarus.ru"
+    },
+    {
+      "name": "Mesilov Maxim",
+      "email": "mesm@rarus.ru",
+      "homepage": "https://rarus.ru"
+    }
+  ],
+  "require": {
+    "php": ">=5.5",
+    "ext-json": "*",
+    "ext-curl": "*",
+    "psr/log": "^1.0",
+    "monolog/monolog": "1.*",
+    "guzzlehttp/guzzle": "6.x"
+  },
+  "require-dev": {
+    "jakub-onderka/php-parallel-lint": "0.9",
+    "jakub-onderka/php-console-highlighter": "~0.3",
+    "phpunit/phpunit": "~4.8",
+    "phpunit/phpunit-mock-objects": "2.3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Rarus\\Restart\\": "src/Restart"
+    }
+  },
+  "scripts": {
+    "test": [
+      "parallel-lint . --exclude vendor --no-colors",
+      "phpunit --colors=always --verbose"
+    ]
+  }
+}
