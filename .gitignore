@@ -3,6 +3,8 @@ composer.phar
 composer.lock
 composer-test.lock
 vendor/
+debug/
 .idea
 .DS_STORE
 .gitignore
+phpunit.phar
