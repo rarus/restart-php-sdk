@@ -176,9 +176,9 @@ class ApiClient implements ApiClientInterface
      * @throws RestartException
      * @throws ApiRestartException
      *
-     * @return null|string
+     * @return array
      */
-    public function executeApiRequest($apiMethod, $requestType, array $arHttpRequestOptions = array())
+    public function executeApiRequest($apiMethod, $requestType, array $arHttpRequestOptions = array()): array
     {
         $arResult = null;
 

@@ -1,9 +1,14 @@
 <?php
+declare(strict_types = 1);
+
 namespace Rarus\Restart;
 
 use GuzzleHttp\Exception\GuzzleException;
-use Rarus\Restart\Exceptions\RestartException;
 
+use Rarus\Restart\{
+    Exceptions\RestartException,
+    Exceptions\ApiRestartException
+};
 
 /**
  * Class Client
@@ -20,8 +25,9 @@ interface ApiClientInterface
      * @throws \RuntimeException on failure.
      * @throws GuzzleException
      * @throws RestartException
+     * @throws ApiRestartException
      *
-     * @return null|string
+     * @return array
      */
-    public function executeApiRequest($apiMethod, $requestType, array $arHttpRequestOptions = array());
+    public function executeApiRequest($apiMethod, $requestType, array $arHttpRequestOptions = array()): array;
 }
