@@ -1,4 +1,6 @@
 <?php
+declare(strict_types = 1);
+
 namespace Rarus\Restart\Exceptions;
 /**
  * Class RestartException
@@ -7,6 +9,7 @@ namespace Rarus\Restart\Exceptions;
  *      RestartException — base class
  *          IoRestartException — I/O network errors
  *          ApiRestartException — API-level exceptions
+ *              ItemNotFoundRestartException — Item not found exception
  *
  * @package Rarus\Restart
  */

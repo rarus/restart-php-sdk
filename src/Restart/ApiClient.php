@@ -1,18 +1,25 @@
 <?php
+declare(strict_types = 1);
+
 namespace Rarus\Restart;
 
-use Psr\Log\NullLogger;
-use Psr\Log\LoggerInterface;
+use Psr\Log\{
+    NullLogger,
+    LoggerInterface
+};
 
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\HandlerStack;
+use Fig\Http\Message\StatusCodeInterface as StatusCode;
 
-use Rarus\Restart\Auth\Token;
-use Rarus\Restart\Auth\TokenInterface;
-use Rarus\Restart\Exceptions\ApiRestartException;
-use Rarus\Restart\Exceptions\RestartException;
+use GuzzleHttp\{
+    ClientInterface,
+    Exception\ClientException,
+    Exception\GuzzleException,
+    HandlerStack
+};
+
+use Rarus\Restart\{
+    Auth\Token, Auth\TokenInterface, Exceptions\ApiRestartException, Exceptions\ItemNotFoundRestartException, Exceptions\RestartException
+};
 
 /**
  * Class ApiClient
@@ -203,31 +210,47 @@ class ApiClient implements ApiClientInterface
             $obResponseBody->rewind();
             $arResult = $this->decodeApiJsonResponse($obResponseBody->getContents());
         } catch (ClientException $e) {
-            $this->log->error(sprintf('http client error [%s]', $e->getMessage()));
-            $this->handleBonusServerApiErrors($e);
+            $this->handleApiErrors($e);
         }
         return $arResult;
     }
 
     /**
-     * @param ClientException $clientException
-     *
-     * @throws ApiRestartException
+     * @param ClientException $e
      * @throws RestartException
-     * @return void
      */
-    protected function handleBonusServerApiErrors(ClientException $clientException)
+    protected function handleApiErrors(ClientException $e)
     {
-        $obErrorResponse = $clientException->getResponse();
+        $this->log->error(sprintf('http client error [%s]', $e->getMessage()));
+
+        $obErrorResponse = $e->getResponse();
         $obStream = $obErrorResponse->getBody();
-        $arServerResponse = $this->decodeApiJsonResponse($obStream->getContents());
 
-        $errorMessage = sprintf('bonus server error: code [%s], message [%s], ',
-            $arServerResponse['code'], $arServerResponse['message']);
-
-        $this->log->error($errorMessage);
-
-        throw new ApiRestartException($errorMessage);
+        switch ($obErrorResponse->getStatusCode()) {
+            case StatusCode::STATUS_BAD_REQUEST:
+                $errorMessage = sprintf('restart api: http-code [%s], invalid request(missing required data), ',
+                    $obErrorResponse->getStatusCode());
+                $obErrorException = new RestartException($errorMessage);
+                break;
+            case StatusCode::STATUS_NOT_FOUND:
+                $errorMessage = sprintf('restart api: http-code [%s], item not found, ',
+                    $obErrorResponse->getStatusCode());
+                $obErrorException = new ItemNotFoundRestartException($errorMessage);
+                break;
+            case StatusCode::STATUS_INTERNAL_SERVER_ERROR:
+                $errorMessage = sprintf('restart api: http-code [%s], internal server error, ',
+                    $obErrorResponse->getStatusCode());
+                $obErrorException = new RestartException($errorMessage);
+                break;
+            default:
+                $arServerResponse = $this->decodeApiJsonResponse($obStream->getContents());
+                $errorMessage = sprintf('restart api: code [%s], message [%s], ',
+                    $arServerResponse['code'], $arServerResponse['message']);
+                $obErrorException = new RestartException($errorMessage);
+                break;
+        }
+        $this->log->warning($errorMessage);
+        throw new $obErrorException;
     }
 
     /**

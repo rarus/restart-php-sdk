@@ -38,7 +38,7 @@ class MenuManager
         } else {
             $this->log = new NullLogger();
         }
-        $this->log->debug('rarus.restart.menu.manager.init');
+        $this->log->info('rarus.restart.menu.manager.init');
     }
 
     /**
