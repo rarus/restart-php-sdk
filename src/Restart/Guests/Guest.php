@@ -125,12 +125,8 @@ class Guest implements GuestInterface
      *
      * @return GuestInterface
      */
-    public static function initFromServerResponse(
-        array $arGuest,
-        $serverTimeFormat = 'Y.m.d H:i:s.u'
-    ): GuestInterface
+    public static function initFromServerResponse(array $arGuest, $serverTimeFormat = 'Y.m.d H:i:s.u'): GuestInterface
     {
-
         $obGuest = new Guest();
 
         if ($arGuest['date_birth'] !== '') {
@@ -145,14 +141,14 @@ class Guest implements GuestInterface
             ->setFirstName($arGuest['first_name'])
             ->setLastName($arGuest['last_name'])
             ->setPatronymic($arGuest['patronymic'])
+            ->setFirstPhone($arGuest['phone1'])
+            ->setSecondPhone($arGuest['phone2'])
+            ->setEmail($arGuest['email'])
             ->setDeliveryAddress($arGuest['delivery_address'])
             ->setActualAddress($arGuest['actual_address'])
             ->setDeliveryMetro($arGuest['delivery_metro'])
             ->setDeliveryStreet($arGuest['delivery_street'])
             ->setDeliveryDistrict($arGuest['delivery_distr'])
-            ->setFirstPhone($arGuest['phone1'])
-            ->setSecondPhone($arGuest['phone2'])
-            ->setEmail($arGuest['email'])
             ->setIsBlacklisted((boolean)$arGuest['black_listed'])
             ->setBlacklistedReason($arGuest['black_reason'])
             ->setTimestamp(\DateTime::createFromFormat($serverTimeFormat, $arGuest['timestamp']));
@@ -209,8 +205,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getId(): string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -220,8 +215,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setId(string $id): Guest
+    protected function setId(string $id): Guest
     {
         $this->id = $id;
         return $this;
@@ -230,8 +224,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getParentId(): string
+    public function getParentId(): string
     {
         return $this->parentId;
     }
@@ -241,8 +234,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setParentId(string $parentId): Guest
+    protected function setParentId(string $parentId): Guest
     {
         $this->parentId = $parentId;
         return $this;
@@ -251,8 +243,7 @@ class Guest implements GuestInterface
     /**
      * @return bool
      */
-    public
-    function isGroup(): bool
+    public function isGroup(): bool
     {
         return $this->isGroup;
     }
@@ -262,8 +253,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setIsGroup(bool $isGroup): Guest
+    protected function setIsGroup(bool $isGroup): Guest
     {
         $this->isGroup = $isGroup;
         return $this;
@@ -272,8 +262,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getName(): string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -283,8 +272,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setName(string $name): Guest
+    protected function setName(string $name): Guest
     {
         $this->name = $name;
         return $this;
@@ -293,8 +281,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getFirstName(): string
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
@@ -304,8 +291,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setFirstName(string $firstName): Guest
+    protected function setFirstName(string $firstName): Guest
     {
         $this->firstName = $firstName;
         return $this;
@@ -314,8 +300,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getLastName(): string
+    public function getLastName(): string
     {
         return $this->lastName;
     }
@@ -325,8 +310,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setLastName(string $lastName): Guest
+    protected function setLastName(string $lastName): Guest
     {
         $this->lastName = $lastName;
         return $this;
@@ -335,8 +319,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getPatronymic(): string
+    public function getPatronymic(): string
     {
         return $this->patronymic;
     }
@@ -346,8 +329,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setPatronymic(string $patronymic): Guest
+    protected function setPatronymic(string $patronymic): Guest
     {
         $this->patronymic = $patronymic;
         return $this;
@@ -356,8 +338,7 @@ class Guest implements GuestInterface
     /**
      * @return \DateTime | null
      */
-    public
-    function getBirthday()
+    public function getBirthday()
     {
         return $this->birthday;
     }
@@ -367,8 +348,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setBirthday(\DateTime $birthday): Guest
+    protected function setBirthday(\DateTime $birthday): Guest
     {
         $this->birthday = $birthday;
         return $this;
@@ -377,8 +357,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getDeliveryAddress(): string
+    public function getDeliveryAddress(): string
     {
         return $this->deliveryAddress;
     }
@@ -388,8 +367,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setDeliveryAddress(string $deliveryAddress): Guest
+    protected function setDeliveryAddress(string $deliveryAddress): Guest
     {
         $this->deliveryAddress = $deliveryAddress;
         return $this;
@@ -398,8 +376,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getActualAddress(): string
+    public function getActualAddress(): string
     {
         return $this->actualAddress;
     }
@@ -409,8 +386,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setActualAddress(string $actualAddress): Guest
+    protected function setActualAddress(string $actualAddress): Guest
     {
         $this->actualAddress = $actualAddress;
         return $this;
@@ -419,8 +395,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getDeliveryMetro(): string
+    public function getDeliveryMetro(): string
     {
         return $this->deliveryMetro;
     }
@@ -430,8 +405,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setDeliveryMetro(string $deliveryMetro): Guest
+    protected function setDeliveryMetro(string $deliveryMetro): Guest
     {
         $this->deliveryMetro = $deliveryMetro;
         return $this;
@@ -440,8 +414,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getDeliveryStreet(): string
+    public function getDeliveryStreet(): string
     {
         return $this->deliveryStreet;
     }
@@ -451,8 +424,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setDeliveryStreet(string $deliveryStreet): Guest
+    protected function setDeliveryStreet(string $deliveryStreet): Guest
     {
         $this->deliveryStreet = $deliveryStreet;
         return $this;
@@ -461,8 +433,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getDeliveryDistrict(): string
+    public function getDeliveryDistrict(): string
     {
         return $this->deliveryDistrict;
     }
@@ -472,8 +443,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setDeliveryDistrict(string $deliveryDistrict): Guest
+    protected function setDeliveryDistrict(string $deliveryDistrict): Guest
     {
         $this->deliveryDistrict = $deliveryDistrict;
         return $this;
@@ -482,8 +452,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getFirstPhone(): string
+    public function getFirstPhone(): string
     {
         return $this->firstPhone;
     }
@@ -493,8 +462,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setFirstPhone(string $firstPhone): Guest
+    protected function setFirstPhone(string $firstPhone): Guest
     {
         $this->firstPhone = $firstPhone;
         return $this;
@@ -503,8 +471,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getSecondPhone(): string
+    public function getSecondPhone(): string
     {
         return $this->secondPhone;
     }
@@ -514,8 +481,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setSecondPhone(string $secondPhone): Guest
+    protected function setSecondPhone(string $secondPhone): Guest
     {
         $this->secondPhone = $secondPhone;
         return $this;
@@ -524,8 +490,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getEmail(): string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -535,8 +500,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setEmail(string $email): Guest
+    protected function setEmail(string $email): Guest
     {
         $this->email = $email;
         return $this;
@@ -545,8 +509,7 @@ class Guest implements GuestInterface
     /**
      * @return bool
      */
-    public
-    function isBlacklisted(): bool
+    public function isBlacklisted(): bool
     {
         return $this->isBlacklisted;
     }
@@ -556,8 +519,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setIsBlacklisted(bool $isBlacklisted): Guest
+    protected function setIsBlacklisted(bool $isBlacklisted): Guest
     {
         $this->isBlacklisted = $isBlacklisted;
         return $this;
@@ -566,8 +528,7 @@ class Guest implements GuestInterface
     /**
      * @return string
      */
-    public
-    function getBlacklistedReason(): string
+    public function getBlacklistedReason(): string
     {
         return $this->blacklistedReason;
     }
@@ -577,8 +538,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setBlacklistedReason(string $blacklistedReason): Guest
+    protected function setBlacklistedReason(string $blacklistedReason): Guest
     {
         $this->blacklistedReason = $blacklistedReason;
         return $this;
@@ -587,8 +547,7 @@ class Guest implements GuestInterface
     /**
      * @return \DateTime
      */
-    public
-    function getTimestamp(): \DateTime
+    public function getTimestamp(): \DateTime
     {
         return $this->timestamp;
     }
@@ -598,8 +557,7 @@ class Guest implements GuestInterface
      *
      * @return Guest
      */
-    protected
-    function setTimestamp(\DateTime $timestamp): Guest
+    protected function setTimestamp(\DateTime $timestamp): Guest
     {
         $this->timestamp = $timestamp;
         return $this;
