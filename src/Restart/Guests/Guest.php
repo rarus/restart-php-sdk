@@ -3,6 +3,9 @@ declare(strict_types = 1);
 
 namespace Rarus\Restart\Guests;
 
+use Rarus\Restart\Common\Address\AddressInfo;
+use Rarus\Restart\Common\Users\UserInfo;
+
 /**
  * Class Guest
  * @package Rarus\Restart\Guests
@@ -25,84 +28,19 @@ class Guest implements GuestInterface
     protected $isGroup;
 
     /**
-     * @var string Наименование, представление на формах и в отчетах
+     * @var UserInfo
      */
-    protected $name;
+    protected $userInfo;
 
     /**
-     * @var string Имя
-     */
-    protected $firstName;
-
-    /**
-     * @var string Фамилия
-     */
-    protected $lastName;
-    /**
-     * @var string Отчество
-     */
-    protected $patronymic;
-
-    /**
-     * @var \DateTime Дата рождения
-     */
-    protected $birthday;
-
-    /**
-     * @var string Основной адрес доставки.
-     *
-     * Список полей (через «,»):
-     * - Индекс
-     * - Регион
-     * - Район
-     * - Город
-     * - Населенный пункт
-     * - Улица
-     * - Дом
-     * - Корпус
-     * - Квартира
-     * - Подъезд
-     * - Этаж
-     * - Код двери/домофон
-     * - Станция метро
-     * - Городской район (зона)
+     * @var AddressInfo Основной адрес доставки.
      */
     protected $deliveryAddress;
 
     /**
-     * @var string Дополнительный адрес доставки. Список полей, как DelivAddress
+     * @var AddressInfo Дополнительный адрес доставки. Список полей, как DelivAddress
      */
     protected $actualAddress;
-
-    /**
-     * @var string Станция метро из $deliveryAddress
-     */
-    protected $deliveryMetro;
-
-    /**
-     * @var string Улица из $deliveryAddress
-     */
-    protected $deliveryStreet;
-
-    /**
-     * @var string Зона из $deliveryAddress
-     */
-    protected $deliveryDistrict;
-
-    /**
-     * @var string Контактный телефон
-     */
-    protected $firstPhone;
-
-    /**
-     * @var string Дополнительный телефон
-     */
-    protected $secondPhone;
-
-    /**
-     * @var string Адрес e-mail
-     */
-    protected $email;
 
     /**
      * @var boolean Признак внесения в «чёрный список»
@@ -128,27 +66,13 @@ class Guest implements GuestInterface
     public static function initFromServerResponse(array $arGuest, $serverTimeFormat = 'Y.m.d H:i:s.u'): GuestInterface
     {
         $obGuest = new Guest();
-
-        if ($arGuest['date_birth'] !== '') {
-            $obGuest->setBirthday(\DateTime::createFromFormat($serverTimeFormat, $arGuest['date_birth']));
-        }
-
         $obGuest
             ->setId($arGuest['id'])
             ->setParentId($arGuest['parent_id'])
             ->setIsGroup((boolean)$arGuest['isgroup'])
-            ->setName($arGuest['name'])
-            ->setFirstName($arGuest['first_name'])
-            ->setLastName($arGuest['last_name'])
-            ->setPatronymic($arGuest['patronymic'])
-            ->setFirstPhone($arGuest['phone1'])
-            ->setSecondPhone($arGuest['phone2'])
-            ->setEmail($arGuest['email'])
-            ->setDeliveryAddress($arGuest['delivery_address'])
-            ->setActualAddress($arGuest['actual_address'])
-            ->setDeliveryMetro($arGuest['delivery_metro'])
-            ->setDeliveryStreet($arGuest['delivery_street'])
-            ->setDeliveryDistrict($arGuest['delivery_distr'])
+            ->setUserInfo(UserInfo::initFromServerResponse($arGuest))
+            ->setDeliveryAddress(AddressInfo::createNewAddressInfoItemFromRawAddress($arGuest['delivery_address']))
+            ->setActualAddress(AddressInfo::createNewAddressInfoItemFromRawAddress($arGuest['actual_address']))
             ->setIsBlacklisted((boolean)$arGuest['black_listed'])
             ->setBlacklistedReason($arGuest['black_reason'])
             ->setTimestamp(\DateTime::createFromFormat($serverTimeFormat, $arGuest['timestamp']));
@@ -156,49 +80,36 @@ class Guest implements GuestInterface
     }
 
     /**
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $patronymic
-     * @param null $birthday
-     * @param string $email
-     * @param string $firstPhone
-     * @param string $secondPhone
-     * @param string $actualAddress
-     * @param string $deliveryAddress
+     * @param UserInfo $userInfo
+     * @param AddressInfo $deliveryAddress
+     * @param AddressInfo $actualAddress
      * @param string $parentId
+     * @param bool $isGroup
+     * @param bool $isBlacklisted
+     * @param string $blacklistedReason
      * @return GuestInterface
      */
     public static function createNewGuestItem(
-        string $firstName = '',
-        string $lastName = '',
-        string $patronymic = '',
-        $birthday = null,
-        string $email = '',
-        string $firstPhone = '',
-        string $secondPhone = '',
-        string $actualAddress = ',,,,,,,,,,,,,',
-        string $deliveryAddress = ',,,,,,,,,,,,,',
-        string $parentId = ''
+        UserInfo $userInfo,
+        AddressInfo $deliveryAddress,
+        AddressInfo $actualAddress,
+        string $parentId = '',
+        bool $isGroup = false,
+        bool $isBlacklisted = false,
+        string $blacklistedReason = ''
+
     ): GuestInterface
     {
         $obGuest = new Guest();
 
-        if ($birthday instanceof \DateTime) {
-            $obGuest->setBirthday($birthday);
-        }
-
         $obGuest
-            ->setIsGroup(false)
-            ->setParentId($parentId)
-            ->setFirstName($firstName)
-            ->setLastName($lastName)
-            ->setPatronymic($patronymic)
+            ->setUserInfo($userInfo)
             ->setDeliveryAddress($deliveryAddress)
             ->setActualAddress($actualAddress)
-            ->setFirstPhone($firstPhone)
-            ->setSecondPhone($secondPhone)
-            ->setEmail($email);
-
+            ->setParentId($parentId)
+            ->setIsGroup($isGroup)
+            ->setIsBlacklisted($isBlacklisted)
+            ->setBlacklistedReason($blacklistedReason);
         return $obGuest;
     }
 
@@ -250,7 +161,6 @@ class Guest implements GuestInterface
 
     /**
      * @param bool $isGroup
-     *
      * @return Guest
      */
     protected function setIsGroup(bool $isGroup): Guest
@@ -260,249 +170,58 @@ class Guest implements GuestInterface
     }
 
     /**
-     * @return string
+     * @return UserInfo
      */
-    public function getName(): string
+    public function getUserInfo(): UserInfo
     {
-        return $this->name;
+        return $this->userInfo;
     }
 
     /**
-     * @param string $name
-     *
+     * @param UserInfo $userInfo
      * @return Guest
      */
-    protected function setName(string $name): Guest
+    protected function setUserInfo(UserInfo $userInfo): Guest
     {
-        $this->name = $name;
+        $this->userInfo = $userInfo;
         return $this;
     }
 
     /**
-     * @return string
+     * @return AddressInfo
      */
-    public function getFirstName(): string
-    {
-        return $this->firstName;
-    }
-
-    /**
-     * @param string $firstName
-     *
-     * @return Guest
-     */
-    protected function setFirstName(string $firstName): Guest
-    {
-        $this->firstName = $firstName;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLastName(): string
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * @param string $lastName
-     *
-     * @return Guest
-     */
-    protected function setLastName(string $lastName): Guest
-    {
-        $this->lastName = $lastName;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPatronymic(): string
-    {
-        return $this->patronymic;
-    }
-
-    /**
-     * @param string $patronymic
-     *
-     * @return Guest
-     */
-    protected function setPatronymic(string $patronymic): Guest
-    {
-        $this->patronymic = $patronymic;
-        return $this;
-    }
-
-    /**
-     * @return \DateTime | null
-     */
-    public function getBirthday()
-    {
-        return $this->birthday;
-    }
-
-    /**
-     * @param \DateTime $birthday
-     *
-     * @return Guest
-     */
-    protected function setBirthday(\DateTime $birthday): Guest
-    {
-        $this->birthday = $birthday;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeliveryAddress(): string
+    public function getDeliveryAddress(): AddressInfo
     {
         return $this->deliveryAddress;
     }
 
     /**
-     * @param string $deliveryAddress
+     * @param AddressInfo $deliveryAddress
      *
      * @return Guest
      */
-    protected function setDeliveryAddress(string $deliveryAddress): Guest
+    protected function setDeliveryAddress(AddressInfo $deliveryAddress): Guest
     {
         $this->deliveryAddress = $deliveryAddress;
         return $this;
     }
 
     /**
-     * @return string
+     * @return AddressInfo
      */
-    public function getActualAddress(): string
+    public function getActualAddress(): AddressInfo
     {
         return $this->actualAddress;
     }
 
     /**
-     * @param string $actualAddress
+     * @param AddressInfo $actualAddress
      *
      * @return Guest
      */
-    protected function setActualAddress(string $actualAddress): Guest
+    protected function setActualAddress(AddressInfo $actualAddress): Guest
     {
         $this->actualAddress = $actualAddress;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeliveryMetro(): string
-    {
-        return $this->deliveryMetro;
-    }
-
-    /**
-     * @param string $deliveryMetro
-     *
-     * @return Guest
-     */
-    protected function setDeliveryMetro(string $deliveryMetro): Guest
-    {
-        $this->deliveryMetro = $deliveryMetro;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeliveryStreet(): string
-    {
-        return $this->deliveryStreet;
-    }
-
-    /**
-     * @param string $deliveryStreet
-     *
-     * @return Guest
-     */
-    protected function setDeliveryStreet(string $deliveryStreet): Guest
-    {
-        $this->deliveryStreet = $deliveryStreet;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDeliveryDistrict(): string
-    {
-        return $this->deliveryDistrict;
-    }
-
-    /**
-     * @param string $deliveryDistrict
-     *
-     * @return Guest
-     */
-    protected function setDeliveryDistrict(string $deliveryDistrict): Guest
-    {
-        $this->deliveryDistrict = $deliveryDistrict;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFirstPhone(): string
-    {
-        return $this->firstPhone;
-    }
-
-    /**
-     * @param string $firstPhone
-     *
-     * @return Guest
-     */
-    protected function setFirstPhone(string $firstPhone): Guest
-    {
-        $this->firstPhone = $firstPhone;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSecondPhone(): string
-    {
-        return $this->secondPhone;
-    }
-
-    /**
-     * @param string $secondPhone
-     *
-     * @return Guest
-     */
-    protected function setSecondPhone(string $secondPhone): Guest
-    {
-        $this->secondPhone = $secondPhone;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     *
-     * @return Guest
-     */
-    protected function setEmail(string $email): Guest
-    {
-        $this->email = $email;
         return $this;
     }
 

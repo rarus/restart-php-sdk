@@ -3,6 +3,9 @@ declare(strict_types = 1);
 
 namespace Rarus\Restart\Guests;
 
+use Rarus\Restart\Common\Address\AddressInfo;
+use Rarus\Restart\Common\Users\UserInfo;
+
 /**
  * Class Guest
  * @package Rarus\Restart\Guests
@@ -20,74 +23,24 @@ interface GuestInterface
     public function getParentId(): string;
 
     /**
+     * @return UserInfo
+     */
+    public function getUserInfo(): UserInfo;
+
+    /**
      * @return bool
      */
     public function isGroup(): bool;
 
     /**
-     * @return string
+     * @return AddressInfo
      */
-    public function getName(): string;
+    public function getDeliveryAddress(): AddressInfo;
 
     /**
-     * @return string
+     * @return AddressInfo
      */
-    public function getFirstName(): string;
-
-    /**
-     * @return string
-     */
-    public function getLastName(): string;
-
-    /**
-     * @return string
-     */
-    public function getPatronymic(): string;
-
-    /**
-     * @return \DateTime | null
-     */
-    public function getBirthday();
-
-    /**
-     * @return string
-     */
-    public function getDeliveryAddress(): string;
-
-    /**
-     * @return string
-     */
-    public function getActualAddress(): string;
-
-    /**
-     * @return string
-     */
-    public function getDeliveryMetro(): string;
-
-    /**
-     * @return string
-     */
-    public function getDeliveryStreet(): string;
-
-    /**
-     * @return string
-     */
-    public function getDeliveryDistrict(): string;
-
-    /**
-     * @return string
-     */
-    public function getFirstPhone(): string;
-
-    /**
-     * @return string
-     */
-    public function getSecondPhone(): string;
-
-    /**
-     * @return string
-     */
-    public function getEmail(): string;
+    public function getActualAddress(): AddressInfo;
 
     /**
      * @return bool

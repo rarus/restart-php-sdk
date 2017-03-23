@@ -109,24 +109,27 @@ class GuestManager
 
     /**
      * @param GuestInterface $obNewGuest
-     *
+     * @throws \RuntimeException on failure.
+     * @throws RestartException
+     * @throws ApiRestartException
      * @return GuestInterface
      */
-    public
-    function add(GuestInterface $obNewGuest): GuestInterface
+    public function add(GuestInterface $obNewGuest): GuestInterface
     {
         $arNewGuest = [
             'parent_id' => $obNewGuest->getParentId(),
             'isgroup' => $obNewGuest->isGroup(),
-            'first_name' => $obNewGuest->getFirstName(),
-            'patronymic' => $obNewGuest->getPatronymic(),
-            'last_name' => $obNewGuest->getLastName(),
-            'date_birth' => $obNewGuest->getBirthday()->format('Y.m.d H:i:s'),
-            'delivery_address' => $obNewGuest->getDeliveryAddress(),
-            'actual_address' => $obNewGuest->getActualAddress(),
-            'phone1' => $obNewGuest->getFirstPhone(),
-            'phone2' => $obNewGuest->getSecondPhone(),
-            'email' => $obNewGuest->getEmail()
+
+            'first_name' => $obNewGuest->getUserInfo()->getFirstName(),
+            'patronymic' => $obNewGuest->getUserInfo()->getPatronymic(),
+            'last_name' => $obNewGuest->getUserInfo()->getLastName(),
+            'date_birth' => $obNewGuest->getUserInfo()->getBirthday()->format('Y.m.d H:i:s'),
+            'phone1' => $obNewGuest->getUserInfo()->getFirstPhone(),
+            'phone2' => $obNewGuest->getUserInfo()->getSecondPhone(),
+            'email' => $obNewGuest->getUserInfo()->getEmail(),
+
+            'delivery_address' => $obNewGuest->getDeliveryAddress()->getRawAddress(),
+            'actual_address' => $obNewGuest->getActualAddress()->getRawAddress(),
         ];
         $this->log->debug('try to add guest', $arNewGuest);
 
