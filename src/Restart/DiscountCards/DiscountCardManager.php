@@ -30,6 +30,11 @@ class DiscountCardManager
      */
     protected $log;
 
+    /**
+     * DiscountCardManager constructor.
+     * @param ApiClientInterface $obApiClient
+     * @param LoggerInterface|null $obLogger
+     */
     public function __construct(ApiClientInterface $obApiClient, LoggerInterface $obLogger = null)
     {
         $this->apiClient = $obApiClient;
@@ -42,22 +47,36 @@ class DiscountCardManager
     }
 
     /**
-     * @param string $id
-     * @param string $name
-     * @param string $parentId
-     * @param string $code
-     * @param string $guestId
-     * @param $timestamp
+     * получение списка дисконтных карт
+     * @param string $id Идентификатор карты. Необязательный
+     * @param string $name Поле для фильтрации по фрагменту [name]. Необязательный
+     * @param string $parentId Родитель. Необязательный
+     * @param string $code Код. Необязательный
+     * @param string $guestId Идентификатор гостя. Необязательный
+     * @param \DateTime $timestamp Возвращает объекты, дата изменения которых больше указанного timestamp. Необязательный
      * @return \SplObjectStorage
      * @throws ApiRestartException
      */
-    public function getList(string $id = '', string $name = '', string $parentId = '', string $code = '', string $guestId = '', $timestamp): \SplObjectStorage
+    public function getList(string $id = '', string $name = '', string $parentId = '', string $code = '', string $guestId = '', \DateTime $timestamp = null): \SplObjectStorage
     {
         $this->log->debug('rarus.restart.discountcard.manager.card.getlist');
 
-        $query = '';
+        $arQuery = [];
+        if ($id !== '') {
+            $arQuery['id'] = $id;
+        }
+        if ($name !== '') {
+            $arQuery['name'] = $name;
+        }
+        if ($parentId !== '') {
+            $arQuery['parent_id'] = $parentId;
+        }
+        if ($code !== '') {
+            $arQuery['parent_id'] = $name;
+        }
 
-        $arResult = $this->apiClient->executeApiRequest(sprintf('/discountcard?%s', $query), RequestMethod::METHOD_GET);
+
+        $arResult = $this->apiClient->executeApiRequest(sprintf('/discountcard?%s', http_build_query($arQuery)), RequestMethod::METHOD_GET);
 
         if (!array_key_exists('card', $arResult)) {
             $errMsg = sprintf('key [card] not found in server response');
@@ -76,6 +95,7 @@ class DiscountCardManager
     }
 
     /**
+     * добавление дисконтной карты
      * @param DiscountCardInterface $obNewCard
      * @return DiscountCardInterface
      */
@@ -105,6 +125,7 @@ class DiscountCardManager
     }
 
     /**
+     * получение дисконтной карты по её идентификатору
      * @param string $discountCardId
      * @return DiscountCardInterface
      */

@@ -68,6 +68,11 @@ class DiscountCard implements DiscountCardInterface
      */
     protected $timestamp;
 
+    /**
+     * @param array $arCard
+     * @param string $serverTimeFormat
+     * @return DiscountCardInterface
+     */
     public static function initFromServerResponse(array $arCard, $serverTimeFormat = 'Y.m.d H:i:s.u'): DiscountCardInterface
     {
         $obCard = new DiscountCard();
@@ -127,8 +132,7 @@ class DiscountCard implements DiscountCardInterface
      * @param string $id
      * @return DiscountCard
      */
-    protected
-    function setId(string $id): DiscountCard
+    protected function setId(string $id): DiscountCard
     {
         $this->id = $id;
         return $this;
@@ -137,8 +141,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return string
      */
-    public
-    function getId(): string
+    public function getId(): string
     {
         return $this->id;
     }
@@ -146,8 +149,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return string
      */
-    public
-    function getParentId(): string
+    public function getParentId(): string
     {
         return $this->parentId;
     }
@@ -156,8 +158,7 @@ class DiscountCard implements DiscountCardInterface
      * @param string $parentId
      * @return DiscountCard
      */
-    protected
-    function setParentId(string $parentId): DiscountCard
+    protected function setParentId(string $parentId): DiscountCard
     {
         $this->parentId = $parentId;
         return $this;
@@ -166,8 +167,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return bool
      */
-    public
-    function isGroup(): bool
+    public function isGroup(): bool
     {
         return $this->isGroup;
     }
@@ -176,8 +176,7 @@ class DiscountCard implements DiscountCardInterface
      * @param bool $isGroup
      * @return DiscountCard
      */
-    protected
-    function setIsGroup(bool $isGroup): DiscountCard
+    protected function setIsGroup(bool $isGroup): DiscountCard
     {
         $this->isGroup = $isGroup;
         return $this;
@@ -186,8 +185,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return string
      */
-    public
-    function getCode(): string
+    public function getCode(): string
     {
         return $this->code;
     }
@@ -196,8 +194,7 @@ class DiscountCard implements DiscountCardInterface
      * @param string $code
      * @return DiscountCard
      */
-    protected
-    function setCode(string $code): DiscountCard
+    protected function setCode(string $code): DiscountCard
     {
         $this->code = $code;
         return $this;
@@ -206,8 +203,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return string
      */
-    public
-    function getName(): string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -216,8 +212,7 @@ class DiscountCard implements DiscountCardInterface
      * @param string $name
      * @return DiscountCard
      */
-    protected
-    function setName(string $name): DiscountCard
+    protected function setName(string $name): DiscountCard
     {
         $this->name = $name;
         return $this;
@@ -226,8 +221,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return bool
      */
-    public
-    function isBlocked(): bool
+    public function isBlocked(): bool
     {
         return $this->isBlocked;
     }
@@ -236,8 +230,7 @@ class DiscountCard implements DiscountCardInterface
      * @param bool $isBlocked
      * @return DiscountCard
      */
-    protected
-    function setIsBlocked(bool $isBlocked): DiscountCard
+    protected function setIsBlocked(bool $isBlocked): DiscountCard
     {
         $this->isBlocked = $isBlocked;
         return $this;
@@ -246,8 +239,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return string
      */
-    public
-    function getBlockReason(): string
+    public function getBlockReason(): string
     {
         return $this->blockReason;
     }
@@ -256,8 +248,7 @@ class DiscountCard implements DiscountCardInterface
      * @param string $blockReason
      * @return DiscountCard
      */
-    protected
-    function setBlockReason(string $blockReason): DiscountCard
+    protected function setBlockReason(string $blockReason): DiscountCard
     {
         $this->blockReason = $blockReason;
         return $this;
@@ -266,8 +257,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return string
      */
-    public
-    function getComment(): string
+    public function getComment(): string
     {
         return $this->comment;
     }
@@ -276,8 +266,7 @@ class DiscountCard implements DiscountCardInterface
      * @param string $comment
      * @return DiscountCard
      */
-    protected
-    function setComment(string $comment): DiscountCard
+    protected function setComment(string $comment): DiscountCard
     {
         $this->comment = $comment;
         return $this;
@@ -286,8 +275,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return string
      */
-    public
-    function getImageUrl(): string
+    public function getImageUrl(): string
     {
         return $this->imageUrl;
     }
@@ -296,8 +284,7 @@ class DiscountCard implements DiscountCardInterface
      * @param string $imageUrl
      * @return DiscountCard
      */
-    protected
-    function setImageUrl(string $imageUrl): DiscountCard
+    protected function setImageUrl(string $imageUrl): DiscountCard
     {
         $this->imageUrl = $imageUrl;
         return $this;
@@ -306,8 +293,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return string
      */
-    public
-    function getGuestId(): string
+    public function getGuestId(): string
     {
         return $this->guestId;
     }
@@ -316,8 +302,7 @@ class DiscountCard implements DiscountCardInterface
      * @param string $guestId
      * @return DiscountCard
      */
-    protected
-    function setGuestId(string $guestId): DiscountCard
+    protected function setGuestId(string $guestId): DiscountCard
     {
         $this->guestId = $guestId;
         return $this;
@@ -326,8 +311,7 @@ class DiscountCard implements DiscountCardInterface
     /**
      * @return \DateTime
      */
-    public
-    function getTimestamp(): \DateTime
+    public function getTimestamp(): \DateTime
     {
         return $this->timestamp;
     }
@@ -336,8 +320,7 @@ class DiscountCard implements DiscountCardInterface
      * @param \DateTime $timestamp
      * @return DiscountCard
      */
-    protected
-    function setTimestamp(\DateTime $timestamp): DiscountCard
+    protected  function setTimestamp(\DateTime $timestamp): DiscountCard
     {
         $this->timestamp = $timestamp;
         return $this;
