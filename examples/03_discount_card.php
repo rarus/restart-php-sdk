@@ -14,6 +14,7 @@ $discountCardManager = new DiscountCardManager($apiClient, $log);
 
 // получение списка дисконтных карт
 $obStorage = $discountCardManager->getList('', 'юдин', '', '', '');
+
 print('список дисконтных карт');
 foreach ($obStorage as $cardItem) {
     /**

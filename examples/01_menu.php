@@ -5,7 +5,7 @@ require_once __DIR__ . '/init.php';
 use \Rarus\Restart\{
     ApiClient,
     Menu\MenuInterface,
-    Menu\MenuItemInterface,
+    Menu\MenuItem,
     Menu\MenuManager,
     Menu\Menu
 };
@@ -39,8 +39,8 @@ $arMenu = [
     'time_begin' => '',
     'date_end' => '',
     'time_end' => '',
-    'week'=> '1111111',
-    'arm'=>'all',
+    'week' => '1111111',
+    'arm' => 'all',
     'timestamp' => '2017.01.25 12:23:06.247'
 
 ];
@@ -52,10 +52,11 @@ $obStorage = $obMenuManager->getMenuItemList($obMenu);
 print('элементы меню' . PHP_EOL);
 foreach ($obStorage as $menuItem) {
     /**
-     * @var MenuItemInterface $menuItem
+     * @var MenuItem $menuItem
      */
     print(sprintf('name: %s' . PHP_EOL, $menuItem->getName()));
     print(sprintf('id: %s' . PHP_EOL, $menuItem->getId()));
+    print(sprintf('product_id: %s' . PHP_EOL, $menuItem->getProductId()));
     print(sprintf('parent_id: %s' . PHP_EOL, $menuItem->getParentId()));
     print(sprintf('is stopped: %s' . PHP_EOL, $menuItem->isStopped() ? 'true' : 'false'));
     print(sprintf('is stopped: %s' . PHP_EOL, $menuItem->isGroup() ? 'true' : 'false'));

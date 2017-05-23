@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Rarus\Restart\Menu;
 
@@ -7,7 +7,7 @@ namespace Rarus\Restart\Menu;
  * Class MenuItem
  * @package Rarus\Restart\Menu
  */
-class MenuItem implements MenuItemInterface
+class MenuItem
 {
     /**
      * @var string
@@ -55,17 +55,21 @@ class MenuItem implements MenuItemInterface
     protected $comment;
 
     /**
+     * @var string
+     */
+    protected $productId;
+
+    /**
      * @param array $arMenuItem
      *
-     * @return MenuItemInterface
+     * @return MenuItem
      */
-    public static function initFromServerResponse(array $arMenuItem): MenuItemInterface
+    public static function initFromServerResponse(array $arMenuItem): MenuItem
     {
-
-
         $obMenuItem = new MenuItem();
         $obMenuItem
             ->setId((string)$arMenuItem['id'])
+            ->setProductId($arMenuItem['product_id'])
             ->setParentId((string)$arMenuItem['parent_id'])
             ->setIsStopped((bool)$arMenuItem['stopped'])
             ->setIsGroup((bool)$arMenuItem['isgroup'])
@@ -76,6 +80,46 @@ class MenuItem implements MenuItemInterface
             ->setComment((string)$arMenuItem['comment']);
 
         return $obMenuItem;
+    }
+
+    /**
+     * @param bool $isGroup
+     *
+     * @return MenuItem
+     */
+    protected function setIsGroup(bool $isGroup): MenuItem
+    {
+        $this->isGroup = $isGroup;
+        return $this;
+    }
+
+    /**
+     * @param bool $isStopped
+     *
+     * @return MenuItem
+     */
+    protected function setIsStopped(bool $isStopped): MenuItem
+    {
+        $this->isStopped = $isStopped;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductId(): string
+    {
+        return $this->productId;
+    }
+
+    /**
+     * @param string $productId
+     * @return MenuItem
+     */
+    protected function setProductId(string $productId): MenuItem
+    {
+        $this->productId = $productId;
+        return $this;
     }
 
     /**
@@ -125,33 +169,11 @@ class MenuItem implements MenuItemInterface
     }
 
     /**
-     * @param bool $isStopped
-     *
-     * @return MenuItem
-     */
-    protected function setIsStopped(bool $isStopped): MenuItem
-    {
-        $this->isStopped = $isStopped;
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function isGroup(): bool
     {
         return $this->isGroup;
-    }
-
-    /**
-     * @param bool $isGroup
-     *
-     * @return MenuItem
-     */
-    protected function setIsGroup(bool $isGroup): MenuItem
-    {
-        $this->isGroup = $isGroup;
-        return $this;
     }
 
     /**
